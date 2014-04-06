@@ -92,6 +92,17 @@ Caution
 -------
 The computation is implemented only for the interior solutions! For "bad" functions solutions could deviate or not be achieved at all.
 
+Install
+-------
+
+Depending on your favorite way to install python packages, run either::
+
+	pip install pyEdgeworthBox
+
+or::
+	
+	easy_install pyEdgworthBox
+
 To Do's:
 -------
 ...
