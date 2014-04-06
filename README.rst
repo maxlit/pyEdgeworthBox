@@ -2,10 +2,10 @@
 pyEdgeworthBox
 ==============
 
-.. image:: https://github.com/maxlit/pyEdgeworthBox/blob/master/ex3.png
+.. image:: https://github.com/maxlit/pyEdgeworthBox/raw/master/ex3.png
 
 How to use it
-------------
+-------------
 
 pyEdgeworthBox provides with a tool to plot the Edgeworth box and calculate equilibrium, core, pareto effective allocation etc in the pure exchange economy.
 These are studied in the microeconomics courses.
@@ -25,9 +25,6 @@ The functions to be handled over must be lambda expressions. So, the utility fun
 Respectively, the utility function of the second consumer u(x,y)=x^0.1*y^0.9 becomes the parameter u2=lambda x,y: x**0.1*y**0.9
 Initial endowments are represented by parameters IE1 and IE2 for the 1-st and the 2-nd consumers respectively.
 
-
-Paragraphs are separated by blank lines. *Italics*, **bold**,
-and ``monospace`` look like this.
 
 How to get the calculated concepts
 ----------------------------------
@@ -81,14 +78,14 @@ In order to plot the Edgeworth box use the function plot()
 
 	EB.plot()
 
-.. image:: https://github.com/maxlit/pyEdgeworthBox/blob/master/ex1.png
+.. image:: https://github.com/maxlit/pyEdgeworthBox/raw/master/ex1.png
 
 Another example:
 
 	EB2=eb.EdgeBox(u1=lambda x,y: x**2*y,u2=lambda x,y: x+y,IE1=[5,5],IE2=[5,5])
 	EB2.plot()
 
-.. image:: https://github.com/maxlit/pyEdgeworthBox/blob/master/ex2.png
+.. image:: https://github.com/maxlit/pyEdgeworthBox/raw/master/ex2.png
 
 
 Caution
