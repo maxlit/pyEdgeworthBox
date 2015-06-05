@@ -1,0 +1,10 @@
+#EB=EdgeBox(u1=lambda x,y: x*y,u2=lambda x,y:x**2+y**2,IE1=[4,3],IE2=[2,3])
+#EB=EdgeBox(u1=lambda x,y: x*y,u2=lambda x,y: x**2*y,IE1=[3,2],IE2=[1,3])
+## http://www.columbia.edu/~eg198/u6400/practice_problems_3_solutions.pdf
+#EB2=EdgeBox(u1=lambda x,y: x**2*y,u2=lambda x,y: x+y,IE1=[5,5],IE2=[5,5])
+## http://paolocrosetto.files.wordpress.com/2010/10/pset6_solutions_handout.pdf
+#EB3=EdgeBox(u1=lambda x,y: x**(1/3.0)*y**(2/3.0),u2=lambda x,y: x**(1/3.0)*y**(2/3.0),IE1=[1,2],IE2=[2,1])
+## http://www.pitt.edu/~mjl88/docs/1100/Problem_Set_06_Answers.pdf
+#EB4=EdgeBox(u1=lambda x,y: x**0.6*y**0.4,u2=lambda x,y: x**0.1*y**0.9,IE1=[10,20],IE2=[20,10])
+##EQ1=(26.31,10.36)
+

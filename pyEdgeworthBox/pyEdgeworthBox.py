@@ -261,7 +261,7 @@ class EdgeBox():
         self.BUDGET=zip(self.X,Budget)
         
     
-    def plot(self):
+    def plot(self,fname=None):
         plot_endow,=plt.plot(self.IE1[0],self.IE1[1],color="white",marker="o")
         m=max(self.IE[0],self.IE[1])
         plt.axis([0,m,0,m],autoscale=False)
@@ -287,4 +287,8 @@ class EdgeBox():
         #Axes Dscription
         plt.xlabel("Units of 1-st good")
         plt.ylabel("Units of 2-nd good")
-        plt.show(block=False)
+        if fname is not None:
+            plt.savefig(fname)
+            plt.close()
+        else:
+            plt.show(block=False)
