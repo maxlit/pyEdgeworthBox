@@ -1,3 +1,5 @@
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/maxlit/pyEdgeworthBox/master?filepath=README.ipynb)
+
 # How to use it
 
 pyEdgeworthBox provides with a tool to plot the [Edgeworth box](https://en.wikipedia.org/wiki/Edgeworth_box) and calculate equilibrium, core, pareto effective allocation etc in the pure exchange economy. These are studied in the microeconomics courses. A pure exchange economy consists of 2 consumers and 2 goods. Each consumer has her own preferences represented by a utility function and provided with some initial endowment of 2 goods (wich, however, could be 0). 
