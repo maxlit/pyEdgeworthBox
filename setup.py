@@ -7,7 +7,7 @@ long_description = """pyEdgeworthBox calculates concepts of the pure exchange ec
 """
 
 setup(name='pyEdgeworthBox',
-    version='0.1.0',
+    version='0.1.1',
     description='Python Library to draw the Edgeworth box and calculate equilibrium, core, pareto efficient allocations etc',
     author='Maxim Litvak',
     author_email='maxim@litvak.eu',
