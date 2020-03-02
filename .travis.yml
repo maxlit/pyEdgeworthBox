@@ -24,7 +24,7 @@ install:
 
   # Replace dep1 dep2 ... with your dependencies
   - conda env create -q python=$TRAVIS_PYTHON_VERSION --file=environment.yml
-  - conda activate test-environment
+  - conda activate pyEdgeworthBox
   - python setup.py install
   #- pip install pyEdgeworthBox
 
