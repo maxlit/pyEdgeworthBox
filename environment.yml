@@ -3,6 +3,8 @@ name: pyEdgeworthBox
 dependencies:
   - python=3.7.3
   - matplotlib
+  - numpy
+  - scipy
   - pip
   - pip:
     - pyEdgeworthBox
