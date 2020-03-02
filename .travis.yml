@@ -23,10 +23,10 @@ install:
   - conda info -a
 
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q python=$TRAVIS_PYTHON_VERSION --file=environment.yml
+  - conda env create -q python=$TRAVIS_PYTHON_VERSION --file=environment.yml
   - conda activate test-environment
-  #- python setup.py install
-  - pip install pyEdgeworthBox
+  - python setup.py install
+  #- pip install pyEdgeworthBox
 
 script: python -m unittest discover
 
