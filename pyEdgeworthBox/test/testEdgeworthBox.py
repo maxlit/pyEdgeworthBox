@@ -1,5 +1,5 @@
 import unittest
-import edgebox as eb
+import pyEdgeworthBox as eb
 from math import exp as e, sin, sqrt
 # python -m unittest discover project_directory '*_test.py'
 # cd Dropbox/scripts/edgeworth/pyEdgeworthBox
@@ -13,7 +13,7 @@ class TestCF(unittest.TestCase):
         self.tolerance=0.00001
         self.assertEqual(True,True)
 
-    def test_(self):
+    def pest_(self):
         l1=lambda x: sin(x)/x
         l2=lambda x: 1/x
         self.assertEqual(eb._(l1,0),1)
