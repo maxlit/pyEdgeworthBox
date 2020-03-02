@@ -210,11 +210,11 @@ class EdgeBox():
         self._B=lambda x,y,p: y-(p*(self.IE1[0]-x)+self.IE1[1]) # budget constraint 
     
     def calc_pareto(self):
-        self.MRS1=MRS(self.u1)
-        self.MRS2=MRS(self.u2)
-        self._pareto=lambda x: root(lambda y: _(self.MRS1,x,y)-_(self.MRS2,self.IE[0]-x,self.IE[1]-y),self.Y[0],self.Y[-1])
+        self.MRS1=MRS(self.u1) # marginal rate of substitution of the 1st participant
+        self.MRS2=MRS(self.u2) # marginal rate of substitution of the 2nd participant 
+        self._pareto=lambda x: root(lambda y: _(self.MRS1,x,y)-_(self.MRS2,self.IE[0]-x,self.IE[1]-y),self.Y[0],self.Y[-1]) # Pareto solutions in functional form
         P = list(map(lambda x: f_None(self._pareto,x),self.X[1:-1]))
-        self.PARETO=list(zip(self.X[1:-1],P))
+        self.PARETO=list(zip(self.X[1:-1],P)) # set of some Pareto solution points (enough to draw it)
         self._Bx=lambda x: root(lambda y: self._B(x,y,self.MRS1(x,y)),self.Y[0],self.Y[-1])
         #plot_pareto,=plt.plot(X,P,linewidth=2)
         PU1_X=root(lambda x: _(self._pareto,x)-_(self.u_ie_1,x),self.U1_min[0],self.U1_max[0])
@@ -228,21 +228,21 @@ class EdgeBox():
     def calc_core(self):
         CORE_X = list(filter(lambda x: x>=self.PU1[0] and x<=self.PU2[0], self.X))
         CORE_Y = list(map(lambda x: self._pareto(x), CORE_X))
-        self.CORE = list(zip(CORE_X,CORE_Y))
+        self.CORE = list(zip(CORE_X,CORE_Y)) # set of some solutions in the core (could be one, could be many or none)
 
     def calc_eq(self):
         EQ_X1=root(lambda x: _(self._pareto,x)-_(self._Bx,x),self.PU1[0],self.PU2[0])
         EQ_Y1=self._pareto(EQ_X1)
         EQ_X2=self.IE[0]-EQ_X1
         EQ_Y2=self.IE[1]-EQ_Y1
-        self.EQ1=[EQ_X1,EQ_Y1]
-        self.EQ2=[EQ_X2,EQ_Y2]
-        self.p=self.MRS1(*self.EQ1)
+        self.EQ1=[EQ_X1,EQ_Y1] # equilibrium solution for the 1st participant
+        self.EQ2=[EQ_X2,EQ_Y2] # equilibrium solution for the 2nd participant
+        self.p=self.MRS1(*self.EQ1) # price vector
         self.p_weighted=[self.p/(self.p+1),1/(self.p+1)]
-        self.UEQ1=self.u1(*self.EQ1)
-        self.UEQ2=self.u2(*self.EQ2)
+        self.UEQ1=self.u1(*self.EQ1) # value of utility function of the 1st participant at her equilibrium point (functional form)
+        self.UEQ2=self.u2(*self.EQ2) # value of utility function of the 2nd participant at her equilibrium point (functional form)
 
-        self.u_eq_1=lambda x: root(lambda y: self.u1(x,y)-self.UEQ1,self.Y[0],self.Y[-1])
+        self.u_eq_1=lambda x: root(lambda y: self.u1(x,y)-self.UEQ1,self.Y[0],self.Y[-1]) 
         self.u_eq_2=lambda x: root(lambda y: self.u2(x,y)-self.UEQ2,self.Y[0],self.Y[-1])
         self.u_eq_2_compl=lambda x: -self.u_eq_2(self.IE[0]-x)+self.IE[1]
         
@@ -255,9 +255,9 @@ class EdgeBox():
         if price is None:
             price=self.p
             
-        self.Bp=lambda x: price*self.IE1[0]+self.IE1[1]-price*x
+        self.Bp=lambda x: price*self.IE1[0]+self.IE1[1]-price*x # budget line (functional form)
         
-        Budget = list(map(self.Bp,self.X))
+        Budget = list(map(self.Bp,self.X)) # set of some points from the budget line
         self.BUDGET = list(zip(self.X,Budget))
         
     
