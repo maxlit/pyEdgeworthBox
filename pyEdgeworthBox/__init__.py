@@ -1,1 +1,1 @@
-from pyEdgeworthBox import *
+from pyEdgeworthBox.pyEdgeworthBox import *
