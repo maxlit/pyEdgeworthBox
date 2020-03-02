@@ -1,5 +1,3 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/maxlit/pyEdgeworthBox/master?filepath=README.ipynb)
-
 # How to use it
 
 pyEdgeworthBox provides with a tool to plot the [Edgeworth box](https://en.wikipedia.org/wiki/Edgeworth_box) and calculate equilibrium, core, pareto effective allocation etc in the pure exchange economy. These are studied in the microeconomics courses. A pure exchange economy consists of 2 consumers and 2 goods. Each consumer has her own preferences represented by a utility function and provided with some initial endowment of 2 goods (wich, however, could be 0). 
@@ -13,7 +11,10 @@ This example can be calculated like this:
 #!pip install pyEdgeworthBox
 %matplotlib inline
 import pyEdgeworthBox as eb
-EB=eb.EdgeBox(u1=lambda x,y: x**0.6*y**0.4,u2=lambda x,y: x**0.1*y**0.9,IE1=[10,20],IE2=[20,10])
+EB=eb.EdgeBox(  u1 = lambda x,y: x**0.6*y**0.4
+              , u2 = lambda x,y: x**0.1*y**0.9
+              , IE1 = [10,20]
+              , IE2 = [20,10])
 EB.plot()
 ```
 
@@ -25,7 +26,10 @@ Another example:
 
 
 ```python
-EB2=eb.EdgeBox(u1=lambda x,y: x**2*y,u2=lambda x,y: x+y,IE1=[5,5],IE2=[5,5])
+EB2=eb.EdgeBox(  u1 =lambda x,y: x**2*y
+               , u2=lambda x,y: x+y
+               , IE1=[5,5]
+               , IE2=[5,5])
 EB2.plot()
 ```
 
@@ -35,10 +39,13 @@ EB2.plot()
 
 # Input arguments
 
-u1 - utility function of the 1st participant
-u2 - utility function of the 2nd participant
-IE1 - initial endowment of the 1st participant (of the good X and good Y)
-IE2 - the same for the 2nd participant
+**u1** - utility function of the 1st participant
+
+**u2** - utility function of the 2nd participant
+
+**IE1** - initial endowment of the 1st participant (of the good X and good Y)
+
+**IE2** - the same for the 2nd participant
 
 This means that the preferences and endowments are enough to determine the rest (prices, equilibrium etc).
 
