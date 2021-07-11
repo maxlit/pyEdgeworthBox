@@ -3,6 +3,15 @@
 
 # How to use it
 
+If you work with docker, launch the jupyter notebook from the command line as follows
+
+```bash
+docker pull powerindex
+docker run -p 8888:8888 axlit/edgebox
+```
+
+copy the link from the command line and then navigate to /powerindex/README.ipynb notebook in the browser.
+
 pyEdgeworthBox provides with a tool to plot the [Edgeworth box](https://en.wikipedia.org/wiki/Edgeworth_box) and calculate equilibrium, core, pareto effective allocation etc in the pure exchange economy. These are studied in the microeconomics courses. A pure exchange economy consists of 2 consumers and 2 goods. Each consumer has her own preferences represented by a utility function and provided with some initial endowment of 2 goods (wich, however, could be 0). 
 
 The main class is EdgeBox where you need to put the utilities of each consumer and their initial endowments. Consider an economy where the first consumer has a utility function $u(x,y)=x^{0.6}*y^{0.4}$ and the bundles of goods A and B (10,20), i.e. she prefers the good A over B. The second consumer has a utility function $u(x,y)=x^{0.1}*y^{0.9}$ and the bundles of goods A and B (20,10), i.e. he prefers the good B over A.
