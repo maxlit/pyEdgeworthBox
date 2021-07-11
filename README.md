@@ -6,7 +6,7 @@
 If you work with docker, launch the jupyter notebook from the command line as follows
 
 ```bash
-docker pull powerindex
+docker pull axlit/edgebox
 docker run -p 8888:8888 axlit/edgebox
 ```
 
