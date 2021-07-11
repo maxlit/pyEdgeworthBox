@@ -1,8 +1,12 @@
+stages:
+  - test
+  - release
+
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python/tags/
-image: python:3.9.5
+#image: python:3.9.5
 #image: jupyter/base-notebook:python-3.9.2
-#image: axlit/edgebox:latest
+image: axlit/edgebox:latest
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -27,30 +31,33 @@ before_script:
   #- source venv/bin/activate
 
 test:
+  stage: test
   script:
 #    - python setup.py test
     - python -m unittest
 #    - pip install tox flake8  # you can also use tox
 #    - tox -e py36,flake8
 
-run:
+release:
+  stage: release
+  only:
+    - tags
   script:
-    - pip install --upgrade pip wheel setuptools
-    - python setup.py bdist_wheel
-    # an alternative approach is to install and run:
-    #- pip install dist/*
-    # run the command here
+    - pip install twine
+    - python setup.py sdist bdist_wheel
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
   artifacts:
     paths:
       - dist/*.whl
 
-pages:
-  script:
-    - pip install sphinx sphinx-rtd-theme
-    - cd doc ; make html
-    - mv build/html/ ../public/
-  artifacts:
-    paths:
-      - public
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+#pages:
+#  script:
+#    - pip install sphinx sphinx-rtd-theme
+#    - cd doc ; make html
+#    - mv build/html/ ../public/
+#  artifacts:
+#    paths:
+#      - public
+#  rules:
+#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
