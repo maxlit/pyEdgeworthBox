@@ -264,7 +264,7 @@ class EdgeBox():
     def plot(self,fname=None):
         plot_endow,=plt.plot(self.IE1[0],self.IE1[1],color="white",marker="o")
         m=max(self.IE[0],self.IE[1])
-        plt.axis([0,m,0,m],autoscale=False)
+        plt.axis([0,m,0,m])
         plot_U1,=plt.plot(*unpack(self.U1),color="blue")
         plot_U2,=plt.plot(*unpack(self.U2),color="brown")
         plot_pareto,=plt.plot(*unpack(self.PARETO),linewidth=2,color="red")
