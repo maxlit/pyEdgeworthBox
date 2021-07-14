@@ -1,3 +1,8 @@
+# This project has been moved to https://gitlab.com/maxlit/pyEdgeworthBox
+
+
+
+
 [![Build Status](https://travis-ci.org/maxlit/pyEdgeworthBox.svg?branch=master)](https://travis-ci.org/maxlit/pyEdgeworthBox)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/maxlit/pyEdgeworthBox/master?filepath=README.ipynb)
 
