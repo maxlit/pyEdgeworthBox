@@ -19,6 +19,7 @@ before_script:
   - python -V  # Print out python version for debugging
   - pip install poetry==1.4.2  # Install Poetry
   - cat pyproject.toml
+  - poetry env use python3.11
   - poetry install --no-root
 
 test:
