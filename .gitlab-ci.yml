@@ -7,6 +7,8 @@ image: python:3.11
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  CURRENT_TIMESTAMP: $(date +"%Y%m%d%H%M")
+
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}-${CURRENT_TIMESTAMP}
@@ -18,7 +20,6 @@ before_script:
   - python -V  # Print out python version for debugging
   - pip install poetry  # Install Poetry
   - poetry install --no-root
-  - export CURRENT_TIMESTAMP=$(date +"%Y%m%d%H%M")
 
 test:
   stage: test
