@@ -1,6 +1,23 @@
-FROM jupyter/minimal-notebook
-COPY requirements.txt requirements.txt
-# Clone a repository (my website in this case)
-RUN git clone https://gitlab.com/maxlit/pyEdgeworthBox.git
-RUN cd pyEdgeworthBox
-RUN pip3 install -r requirements.txt
+# Use the new base image from quay.io
+FROM quay.io/jupyter/minimal-notebook
+
+# Set the working directory in the container to /app
+WORKDIR /app
+
+# Copy the pyproject.toml and poetry.lock (if exists) files into the container at /app
+COPY pyproject.toml poetry.lock* /app/
+
+# Install poetry in the container
+RUN pip install poetry
+
+# Disable virtualenv creation by poetry, as it's not needed in Docker
+RUN poetry config virtualenvs.create false
+
+# Install dependencies using poetry
+RUN poetry install --no-dev
+
+# Copy the contents of the pyEdgeworthBox repository into the container
+COPY . /app/
+
+# Continue with any other commands you need
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token="]

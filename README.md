@@ -15,7 +15,7 @@ docker pull axlit/edgebox
 docker run -p 8888:8888 axlit/edgebox
 ```
 
-copy the link from the command line and then navigate to /powerindex/README.ipynb notebook in the browser.
+copy the link from the command line and then navigate to 127.0.0.1:8888 or localhost:8888 in your browser and open README.ipynb notebook.
 
 pyEdgeworthBox provides with a tool to plot the [Edgeworth box](https://en.wikipedia.org/wiki/Edgeworth_box) and calculate equilibrium, core, pareto effective allocation etc in the pure exchange economy. These are studied in the microeconomics courses. A pure exchange economy consists of 2 consumers and 2 goods. Each consumer has her own preferences represented by a utility function and provided with some initial endowment of 2 goods (wich, however, could be 0). 
 
