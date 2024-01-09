@@ -9,11 +9,11 @@ variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   CURRENT_TIMESTAMP: $(date +"%Y%m%d%H%M")
 
-cache:
-  key: "poetry-${CI_PIPELINE_CREATED_AT}"
-  paths:
-    - .cache/pip
-    - venv/
+#cache:
+#  key: "poetry-${CI_PIPELINE_CREATED_AT}"
+#  paths:
+#    - .cache/pip
+#    - venv/
 
 before_script:
   - python -V  # Print out python version for debugging
