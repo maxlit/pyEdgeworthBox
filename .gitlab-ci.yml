@@ -37,16 +37,19 @@ build-package:
     - poetry run python setup.py sdist bdist_wheel
 
 build-docker:
+  image: docker:19.03.12
+  services:
+    - docker:19.03.12-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
   stage: build
   needs:
     - build-package
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
   script:
-    - docker build -t $DOCKER_HUB_USERNAME/edgebox:${CI_COMMIT_TAG} .
+    - docker info
+    - docker build -t my-image .
+
 
 release-package:
   stage: release
