@@ -22,10 +22,12 @@ test:
   stage: test
   script:
     - poetry run python -m unittest
+
 build:
   stage: build
   script:
-    - poetry build
+    - chmod +x build.sh  # Ensure the script is executable
+    - ./build.sh  # Run the build script
 
 release:
   stage: release
