@@ -47,6 +47,7 @@ build-package:
 build-docker:
   stage: dockerize
   extends: .docker-base
+  needs: ["build-package"]
   script:
     - docker info
     - docker build -t my-image .
@@ -64,6 +65,7 @@ release-package:
 release-docker:
   stage: release
   extends: .docker-base
+  needs: ["release-package"]
   only:
     - tags
   script:
