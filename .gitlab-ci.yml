@@ -1,5 +1,6 @@
 stages:
   - test
+  - build
   - release
 
 image: python:3.11
