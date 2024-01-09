@@ -9,16 +9,15 @@ variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   CURRENT_TIMESTAMP: $(date +"%Y%m%d%H%M")
 
-
 cache:
-  key: ${CI_COMMIT_REF_SLUG}-${CURRENT_TIMESTAMP}
+  key: "poetry-${CI_PIPELINE_CREATED_AT}"
   paths:
     - .cache/pip
     - venv/
 
 before_script:
   - python -V  # Print out python version for debugging
-  - pip install poetry  # Install Poetry
+  - pip install poetry==1.4.2  # Install Poetry
   - poetry install --no-root
 
 test:
