@@ -20,7 +20,7 @@ before_script:
 test:
   stage: test
   script:
-    - python -m unittest
+    - poetry run python -m unittest
 
 release:
   stage: release
