@@ -8,7 +8,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock* /app/
 
 # Install poetry, disable virtualenv creation, and install dependencies in one layer
-RUN pip install --progress-bar off poetry==1.4.2 && \
+RUN pip install --progress-bar off poetry && \
     poetry config virtualenvs.create false && \
     poetry install --only main
 
