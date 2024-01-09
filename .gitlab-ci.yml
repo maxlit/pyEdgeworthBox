@@ -8,7 +8,7 @@ image: python:3.11
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   CURRENT_TIMESTAMP: $(date +"%Y%m%d%H%M")
-  POETRY_VIRTUALENVS_PATH: "/root/.cache/pypoetry/virtualenvs/pyEdgeworthBox-$(date +"%Y%m%d%H%M")-py3.11"
+  POETRY_VIRTUALENVS_PATH: "/root/.cache/pypoetry/virtualenvs/pyEdgeworthBox-$(date +'%Y%m%d%H%M')-py3.11"
 
 #cache:
 #  key: "poetry-${CI_PIPELINE_CREATED_AT}"
