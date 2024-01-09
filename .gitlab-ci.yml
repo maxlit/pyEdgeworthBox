@@ -13,30 +13,14 @@ cache:
     - .cache/pip
     - venv/
 
-python-base:
+.python-base:
   image: python:3.11.7
   before_script:
     - python -V  # Print out python version for debugging
     - pip install poetry==1.4.2  # Install Poetry
     - poetry -vvv install --no-root
 
-test:
-  stage: test
-  extends: python-base
-  script:
-    - poetry run python -m unittest
-
-build-package:
-  stage: build
-  extends: python-base
-  script:
-    - poetry run python setup.py sdist bdist_wheel
-  artifacts:
-    paths:
-      - dist/*.whl
-      - dist/*.tar.gz
-
-docker-base:
+.docker-base:
   image: docker:19.03.12
   services:
     - docker:19.03.12-dind
@@ -44,16 +28,32 @@ docker-base:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
 
+test:
+  stage: test
+  extends: .python-base
+  script:
+    - poetry run python -m unittest
+
+build-package:
+  stage: build
+  extends: .python-base
+  script:
+    - poetry run python setup.py sdist bdist_wheel
+  artifacts:
+    paths:
+      - dist/*.whl
+      - dist/*.tar.gz
+
 build-docker:
   stage: dockerize
-  extends: docker-base
+  extends: .docker-base
   script:
     - docker info
     - docker build -t my-image .
 
 release-package:
   stage: release
-  extends: python-base
+  extends: .python-base
   only:
     - tags
   script:
@@ -63,7 +63,7 @@ release-package:
 
 release-docker:
   stage: release
-  extends: docker-base
+  extends: .docker-base
   only:
     - tags
   script:
