@@ -8,7 +8,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock* /app/
 
 # Install poetry in the container
-RUN pip install poetry
+RUN pip install --progress-bar off poetry==1.4.2
 
 # Disable virtualenv creation by poetry, as it's not needed in Docker
 RUN poetry config virtualenvs.create false
