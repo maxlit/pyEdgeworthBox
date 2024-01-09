@@ -9,8 +9,8 @@ COPY pyproject.toml poetry.lock* /app/
 
 # Install poetry, disable virtualenv creation, and install dependencies in one layer
 RUN pip install --progress-bar off poetry && \
-    poetry config virtualenvs.create false && \
-    poetry install --only main
+    poetry config virtualenvs.create false
+RUN poetry -vvv install --only main
 
 # Copy the contents of the pyEdgeworthBox repository into the container
 COPY . /app/
