@@ -12,10 +12,6 @@ RUN pip install --progress-bar off poetry==1.4.2 && \
     poetry config virtualenvs.create false && \
     poetry install --only main
 
-# Clean up cache and temporary files
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ~/.cache/pip/*
-
 # Copy the contents of the pyEdgeworthBox repository into the container
 COPY . /app/
 
