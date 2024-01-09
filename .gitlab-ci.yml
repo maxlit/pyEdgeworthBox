@@ -2,22 +2,11 @@ stages:
   - test
   - release
 
-# Official language image. Look for the different tagged releases at:
-# https://hub.docker.com/r/library/python/tags/
-#image: python:3.9.5
-#image: jupyter/base-notebook:python-3.9.2
-image: axlit/edgebox:latest
+image: python:3.11
 
-# Change pip's cache directory to be inside the project directory since we can
-# only cache local items.
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
-# Pip's cache doesn't store the python packages
-# https://pip.pypa.io/en/stable/reference/pip_install/#caching
-#
-# If you want to also cache the installed packages, you have to install
-# them in a virtualenv and cache it as well.
 cache:
   paths:
     - .cache/pip
@@ -25,18 +14,13 @@ cache:
 
 before_script:
   - python -V  # Print out python version for debugging
-  - pip install -r requirements.txt
-  #- pip install virtualenv
-  #- virtualenv venv
-  #- source venv/bin/activate
+  - pip install poetry  # Install Poetry
+  - poetry install --no-root
 
 test:
   stage: test
   script:
-#    - python setup.py test
-    - python -m unittest
-#    - pip install tox flake8  # you can also use tox
-#    - tox -e py36,flake8
+    - poetry run python -m unittest
 
 release:
   stage: release
@@ -44,21 +28,9 @@ release:
     - tags
   script:
     - pip install twine
-    - python setup.py sdist bdist_wheel
+    - poetry build
     - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
     - TWINE_PASSWORD=${PYPI_PASSWORD} TWINE_USERNAME=${PYPI_USERNAME} python -m twine upload --repository pypi dist/* --verbose
   artifacts:
     paths:
       - dist/*.whl
-
-#pages:
-#  script:
-#    - pip install sphinx sphinx-rtd-theme
-#    - cd doc ; make html
-#    - mv build/html/ ../public/
-#  artifacts:
-#    paths:
-#      - public
-#  rules:
-#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
