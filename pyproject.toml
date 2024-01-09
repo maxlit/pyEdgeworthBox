@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pyedgeworthbox"
+name = "pyEdgeworthBox"
 version = "0.1.9"
 description = "calculate equilibrium, core, pareto effective allocation etc in the pure exchange economy, plot Edgeworth box (microeconomics"
 authors = ["Maxim Litvak <maxim.litvak@gmail.com>"]
@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.11"
 scipy = "^1.11.4"
 matplotlib = "^3.8.2"
+numpy = "^1.26.3"
 
 
 [build-system]
