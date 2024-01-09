@@ -2,7 +2,7 @@ stages:
   - test
   - release
 
-image: axlit/edgebox:latest
+image: python:3.11
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
