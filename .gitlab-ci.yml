@@ -10,11 +10,11 @@ variables:
   CURRENT_TIMESTAMP: $(date +"%Y%m%d%H%M")
   POETRY_VIRTUALENVS_PATH: "/root/.cache/pypoetry/virtualenvs/pyEdgeworthBox-$(date +'%Y%m%d%H%M')-py3.11"
 
-#cache:
-#  key: "poetry-${CI_PIPELINE_CREATED_AT}"
-#  paths:
-#    - .cache/pip
-#    - venv/
+cache:
+  key: "poetry-${CI_PIPELINE_CREATED_AT}"
+  paths:
+    - .cache/pip
+    - venv/
 
 before_script:
   - python -V  # Print out python version for debugging
