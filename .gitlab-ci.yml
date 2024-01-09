@@ -15,7 +15,7 @@ cache:
 before_script:
   - python -V  # Print out python version for debugging
   - pip install poetry  # Install Poetry
-  - poetry install
+  - poetry install --no-root
 
 test:
   stage: test
