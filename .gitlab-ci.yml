@@ -9,6 +9,7 @@ variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
 cache:
+  key: ${CI_COMMIT_REF_SLUG}-${CURRENT_TIMESTAMP}
   paths:
     - .cache/pip
     - venv/
@@ -17,6 +18,7 @@ before_script:
   - python -V  # Print out python version for debugging
   - pip install poetry  # Install Poetry
   - poetry install --no-root
+  - export CURRENT_TIMESTAMP=$(date +"%Y%m%d%H%M")
 
 test:
   stage: test
