@@ -8,6 +8,7 @@ image: python:3.11
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   CURRENT_TIMESTAMP: $(date +"%Y%m%d%H%M")
+  POETRY_VIRTUALENVS_PATH: "/root/.cache/pypoetry/virtualenvs/pyEdgeworthBox-$(date +"%Y%m%d%H%M")-py3.11"
 
 #cache:
 #  key: "poetry-${CI_PIPELINE_CREATED_AT}"
@@ -19,8 +20,10 @@ before_script:
   - python -V  # Print out python version for debugging
   - pip install poetry==1.4.2  # Install Poetry
   - cat pyproject.toml
-  - poetry env use python3.11
-  - poetry install --no-root
+  - whoami
+  - env
+  - poetry -vvv env use python3.11
+  - poetry -vvv install --no-root
 
 test:
   stage: test
