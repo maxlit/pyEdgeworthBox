@@ -12,6 +12,9 @@ matplotlib = "^3.8.2"
 numpy = "^1.26.3"
 
 
+[tool.poetry.group.dev.dependencies]
+wheel = "^0.42.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

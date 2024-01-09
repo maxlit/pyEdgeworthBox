@@ -21,6 +21,10 @@ test:
   stage: test
   script:
     - poetry run python -m unittest
+build:
+  stage: build
+  script:
+    - poetry build
 
 release:
   stage: release
