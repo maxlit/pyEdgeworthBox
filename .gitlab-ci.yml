@@ -50,7 +50,7 @@ build-docker:
   needs: ["build-package"]
   script:
     - docker info
-    - docker build --privileged -t my-image .
+    - docker build -t deleteme .
 
 release-package:
   stage: release
