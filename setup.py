@@ -10,7 +10,7 @@ pyEdgeworthBox calculates concepts of the pure exchange economy
 
 setup(
     name='pyEdgeworthBox',
-    version=os.environ['CI_COMMIT_TAG'],
+    version = os.environ.get('CI_COMMIT_TAG', '0.0.0-dev'),
     description='Python Library to draw the Edgeworth box and calculate equilibrium, core, pareto efficient allocations etc',
     long_description=long_description,  # Include the long description
     long_description_content_type='text/plain',  # Specify the content type, can be 'text/markdown' for Markdown
