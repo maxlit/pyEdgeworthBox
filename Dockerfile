@@ -14,7 +14,7 @@ RUN pip install --progress-bar off poetry==1.4.2
 RUN poetry config virtualenvs.create false
 
 # Install dependencies using poetry
-RUN poetry install --no-dev
+RUN poetry install --only main
 
 # Copy the contents of the pyEdgeworthBox repository into the container
 COPY . /app/
