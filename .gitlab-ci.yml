@@ -1,11 +1,13 @@
 stages:
   - test
+  - static
   - build
   - dockerize
   - release
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  DOCKER_IMAGE_NAME: "edgebox"
 
 cache:
   key: "$CI_COMMIT_REF_SLUG"
@@ -19,6 +21,41 @@ cache:
     - python -V  # Print out python version for debugging
     - pip install  --progress-bar off poetry==1.4.2  # Install Poetry
     - poetry -vvv install --no-root
+
+mypy:
+  stage: static
+  extends: .python-base
+  allow_failure: true
+  script:
+    - pip install mypy
+    - python -m mypy */*.py
+  when: manual
+
+flake8:
+  stage: static
+  extends: .python-base
+  allow_failure: true
+  script:
+    - pip install flake8
+    - flake8 --max-line=120 */*.py
+  when: manual
+
+pylint:
+  stage: static
+  extends: .python-base
+  allow_failure: true
+  script:
+    - pip install pylint
+    - mkdir ./pylint
+    - pylint --output-format=text */*.py | tee ./pylint/pylint.log || pylint-exit $?
+    - PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' ./pylint/pylint.log)
+    - anybadge --label=Pylint --file=pylint/pylint.svg --value=$PYLINT_SCORE 2=red 4=orange 8=yellow 10=green
+    - echo "Pylint score is $PYLINT_SCORE"
+  when: manual
+  artifacts:
+    paths:
+      - ./pylint/
+
 
 .docker-base:
   image: docker:20.10.24
@@ -52,6 +89,7 @@ build-docker:
     - echo "Docker Hub Username ${DOCKER_HUB_USERNAME}"
     - docker info
     - docker build -t deleteme .
+  when: manual
 
 release-package:
   stage: release
@@ -73,7 +111,7 @@ release-docker:
   script:
     - echo "Docker Hub Username ${DOCKER_HUB_USERNAME}"
     - docker info
-    - docker build -t ${DOCKER_HUB_USERNAME}/edgebox:${CI_COMMIT_TAG} .
+    - docker build -t ${DOCKER_HUB_USERNAME}/${DOCKER_IMAGE_NAME}:${CI_COMMIT_TAG} .
     - echo $DOCKER_HUB_ACCESS_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
-    - docker push "${DOCKER_HUB_USERNAME}/edgebox:${CI_COMMIT_TAG}""
+    - docker push ${DOCKER_HUB_USERNAME}/{DOCKER_IMAGE_NAME}:${CI_COMMIT_TAG}
   when: manual
