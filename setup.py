@@ -18,7 +18,19 @@ setup(
     url='https://gitlab.com/maxlit/pyEdgeworthBox',
     test_suite='test',
     packages=['pyEdgeworthBox'],
+    keywords=['Pareto','Walras equilibrium','contract curve','Edgeworth box','budget line', 'microeconomics','game theory', 'marginal rate of substitution'],
     classifiers=[
-        # Your classifiers
-    ],
+        'Development Status :: 3 - Alpha',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'Intended Audience :: Education',
+        'License :: OSI Approved :: Python Software Foundation License',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX',
+        'Programming Language :: Python',
+        'Topic :: Education',
+        'Topic :: Sociology'
+        ],
 )
