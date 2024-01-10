@@ -68,11 +68,12 @@ release-package:
 release-docker:
   stage: release
   extends: .docker-base
-  needs: ["release-package"]
   only:
     - tags
   script:
+    - echo "Docker Hub Username ${DOCKER_HUB_USERNAME}"
+    - docker info
     - docker build -t ${DOCKER_HUB_USERNAME}/edgebox:${CI_COMMIT_TAG} .
     - echo $DOCKER_HUB_ACCESS_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
-    - docker push ${DOCKER_HUB_USERNAME}/edgebox:${CI_COMMIT_TAG}
+    - docker push "${DOCKER_HUB_USERNAME}/edgebox:${CI_COMMIT_TAG}""
   when: manual
