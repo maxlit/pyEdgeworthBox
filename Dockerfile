@@ -15,7 +15,7 @@ RUN poetry -v install --no-root
 # Copy the contents of the pyEdgeworthBox repository into the container
 COPY . /app/
 
-RUN pip install --progress-bar off twine && python setup.py sdist bdist_wheel
+#RUN pip install --progress-bar off twine && python setup.py sdist bdist_wheel
 
 
 # Continue with any other commands you need
