@@ -49,7 +49,7 @@ build-docker:
   extends: .docker-base
   needs: ["build-package"]
   script:
-    - echo "Docker Hub Username: ${DOCKER_HUB_USERNAME}"
+    - echo "Docker Hub Username ${DOCKER_HUB_USERNAME}"
     - docker info
     - docker build -t deleteme .
 
