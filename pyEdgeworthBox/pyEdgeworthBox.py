@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from math import sqrt, copysign
+from math import copysign
 from scipy.optimize import brenth
-from scipy.optimize import fsolve,fmin_l_bfgs_b,fmin_cg,fminbound
+from scipy.optimize import fmin_l_bfgs_b,fmin_cg,fminbound
 
 
 """
@@ -46,12 +46,13 @@ def _(f,*x):
         else:
             return out
     except ZeroDivisionError:
-        l=len(x)
-        eps=abs(f(*[1e-02]*l)-f(*[1e-04]*l))
-        if abs(f(*[1e-04]*l)-f(*[1e-06]*l))<eps and abs(f(*[1e-06]*l)-f(*[1e-08]*l))<eps:
+        l = len(x)
+        eps = abs(f(*[1e-02]*l) - f(*[1e-04]*l))
+        # if converges
+        if abs(f(*[1e-04]*l) - f(*[1e-06]*l)) < eps and abs(f(*[1e-06]*l)-f(*[1e-08 ]*l)) < eps:
             return f(*[1e-10]*l)
         else:
-            return sign(f(*[1e-10]*l))*float("inf")
+            return sign(f(*[1e-10]*l)) * float("inf")
 
 """
 produces the array of the first items of the element of the array
@@ -211,19 +212,21 @@ class EdgeBox():
     
     def calc_pareto(self):
         self.MRS1=MRS(self.u1) # marginal rate of substitution of the 1st participant
-        self.MRS2=MRS(self.u2) # marginal rate of substitution of the 2nd participant 
-        self._pareto=lambda x: root(lambda y: _(self.MRS1,x,y)-_(self.MRS2,self.IE[0]-x,self.IE[1]-y),self.Y[0],self.Y[-1]) # Pareto solutions in functional form
-        P = list(map(lambda x: f_None(self._pareto,x),self.X[1:-1]))
-        self.PARETO=list(zip(self.X[1:-1],P)) # set of some Pareto solution points (enough to draw it)
-        self._Bx=lambda x: root(lambda y: self._B(x,y,self.MRS1(x,y)),self.Y[0],self.Y[-1])
+        self.MRS2=MRS(self.u2) # marginal rate of substitution of the 2nd participant
+        self.mrs_ratio = lambda x,y: self.MRS1(x,y)/self.MRS2(self.IE[0]-x,self.IE[1]-y) # ratio of marginal rates of substitution
+        self._pareto = lambda x: root(lambda y: self.mrs_ratio(x,y) - 1, self.Y[0], self.Y[-1]) # Pareto solutions in functional form
+        #self._pareto=lambda x: root(lambda y: _(self.MRS1, x, y)/_(self.MRS2, self.IE[0] - x, self.IE[1] - y) - 1, self.Y[0], self.Y[-1]) # Pareto solutions in functional form
+        P = list(map(lambda x: f_None(self._pareto,x), self.X[1:-1]))
+        self.PARETO = list(zip(self.X[1:-1],P)) # set of some Pareto solution points (enough to draw it)
+        self._Bx = lambda x: root(lambda y: self._B(x,y, self.MRS1(x,y)), self.Y[0], self.Y[-1])
         #plot_pareto,=plt.plot(X,P,linewidth=2)
-        PU1_X=root(lambda x: _(self._pareto,x)-_(self.u_ie_1,x),self.U1_min[0],self.U1_max[0])
-        PU2_X=root(lambda x: _(self._pareto,x)-_(self.u_ie_2_compl,x),self.U2_min[0],self.U2_max[0])
-        PU1_Y=self.u_ie_1(PU1_X)
-        PU2_Y=self.u_ie_2_compl(PU2_X)
-        self.PU1=[PU1_X,PU1_Y]
-        self.PU2=[PU2_X,PU2_Y]
-        self._Bx=lambda x: root(lambda y: _(self._B,x,y,_(self.MRS1,x,y)),self.Y[0],self.Y[-1])
+        PU1_X = root(lambda x: _(self._pareto,x) - _(self.u_ie_1,x), self.U1_min[0], self.U1_max[0])
+        PU2_X = root(lambda x: _(self._pareto,x) - _(self.u_ie_2_compl,x), self.U2_min[0], self.U2_max[0])
+        PU1_Y = self.u_ie_1(PU1_X)
+        PU2_Y = self.u_ie_2_compl(PU2_X)
+        self.PU1 = [PU1_X,PU1_Y]
+        self.PU2 = [PU2_X,PU2_Y]
+        self._Bx = lambda x: root(lambda y: _(self._B,x,y,_(self.MRS1,x,y)),self.Y[0],self.Y[-1])
     
     def calc_core(self):
         CORE_X = list(filter(lambda x: x>=self.PU1[0] and x<=self.PU2[0], self.X))
@@ -262,7 +265,8 @@ class EdgeBox():
         
     
     def plot(self,fname=None):
-        plot_endow,=plt.plot(self.IE1[0],self.IE1[1],color="white",marker="o")
+        plot_endow,=plt.plot(self.IE1[0],self.IE1[1],color="grey",marker="o")
+        #plt.annotate("IE", (self.IE1[0], self.IE1[1]), textcoords="offset points", xytext=(5,5), ha='right')
         m=max(self.IE[0],self.IE[1])
         plt.axis([0,m,0,m])
         plot_U1,=plt.plot(*unpack(self.U1),color="blue")
