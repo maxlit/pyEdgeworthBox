@@ -4,8 +4,7 @@ from setuptools import setup
 import os
 
 long_description = """
-pyEdgeworthBox calculates concepts of the pure exchange economy
-(subject to microeconomics) and draws the Edgeworth box.
+pyEdgeworthBox calculates equilibrium, core, pareto effective allocation etc in the pure exchange economy, plots Edgeworth box (microeconomics)
 """
 
 setup(
