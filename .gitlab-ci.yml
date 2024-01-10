@@ -63,6 +63,7 @@ release-package:
     - python setup.py sdist bdist_wheel
     - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
     - TWINE_PASSWORD=${PYPI_PASSWORD} TWINE_USERNAME=${PYPI_USERNAME} python -m twine upload --repository pypi dist/* --verbose
+  when: manual
 
 release-docker:
   stage: release
@@ -71,6 +72,7 @@ release-docker:
   only:
     - tags
   script:
-    - docker build -t $DOCKER_HUB_USERNAME/edgebox:${CI_COMMIT_TAG} .
+    - docker build -t ${DOCKER_HUB_USERNAME}/edgebox:${CI_COMMIT_TAG} .
     - echo $DOCKER_HUB_ACCESS_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
     - docker push ${DOCKER_HUB_USERNAME}/edgebox:${CI_COMMIT_TAG}
+  when: manual
