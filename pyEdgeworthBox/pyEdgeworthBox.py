@@ -234,7 +234,7 @@ class EdgeBox():
         self.CORE = list(zip(CORE_X,CORE_Y)) # set of some solutions in the core (could be one, could be many or none)
 
     def calc_eq(self):
-        EQ_X1=root(lambda x: _(self._pareto,x)-_(self._Bx,x),self.PU1[0],self.PU2[0])
+        EQ_X1=root(lambda x: _(self._pareto, x) - _(self._Bx, x), self.PU1[0], self.PU2[0])
         EQ_Y1=self._pareto(EQ_X1)
         EQ_X2=self.IE[0]-EQ_X1
         EQ_Y2=self.IE[1]-EQ_Y1
@@ -264,30 +264,51 @@ class EdgeBox():
         self.BUDGET = list(zip(self.X,Budget))
         
     
-    def plot(self,fname=None):
+    def plot(self, graphs = ['utility', 'pareto', 'budget', 'core', 'eq'], fname=None):
         plot_endow,=plt.plot(self.IE1[0],self.IE1[1],color="grey",marker="o")
         #plt.annotate("IE", (self.IE1[0], self.IE1[1]), textcoords="offset points", xytext=(5,5), ha='right')
         m=max(self.IE[0],self.IE[1])
         plt.axis([0,m,0,m])
-        plot_U1,=plt.plot(*unpack(self.U1),color="blue")
-        plot_U2,=plt.plot(*unpack(self.U2),color="brown")
-        plot_pareto,=plt.plot(*unpack(self.PARETO),linewidth=2,color="red")
-        
-        plot_core,=plt.plot(*unpack(self.CORE),color="black",linewidth=4)
-        
-        plot_U1_EQ,=plt.plot(*unpack(self.U1_EQ),ls='--',color="blue")
-        plot_U2_EQ,=plt.plot(*unpack(self.U2_EQ),ls='--',color="brown")
-        plot_budget,=plt.plot(*unpack(self.BUDGET),color="green")
-        plt.plot(self.PU1[0],self.PU1[1],color="blue",marker="o")
-        plt.plot(self.PU2[0],self.PU2[1],color="brown",marker="o")
-        plot_walras,=plt.plot(self.EQ1[0],self.EQ1[1],color="green",marker="o")
+        _plots = {}
+        if 'utility' in graphs:
+            plot_U1,=plt.plot(*unpack(self.U1),color="blue")
+            plot_U2,=plt.plot(*unpack(self.U2),color="brown")
+            _plots['utility'] = [plot_U1, plot_U2]
+        if 'pareto' in graphs:
+            plot_pareto,=plt.plot(*unpack(self.PARETO),linewidth=2,color="red")
+            _plots['pareto'] = [plot_pareto]
+        if 'core' in graphs:
+            plot_core,=plt.plot(*unpack(self.CORE),color="black",linewidth=4)
+            _plots['core'] = [plot_core]
+        if 'eq' in graphs:
+            plot_U1_EQ,=plt.plot(*unpack(self.U1_EQ),ls='--',color="blue")
+            plot_U2_EQ,=plt.plot(*unpack(self.U2_EQ),ls='--',color="brown")
+            plot_walras,=plt.plot(self.EQ1[0],self.EQ1[1],color="green",marker="o")
+            # annotation
+            plt.annotate("(%s;%s) [p=(%s;1)]" % tuple(map(lambda x: round(x, 2), [self.EQ1[0],self.EQ1[1],self.p]))
+                         , xy=self.EQ1, xytext=(self.EQ1[0]+self.dt,self.EQ1[1]-self.dt))
 
-        # annotation
-        plt.annotate("(%s;%s)"%(round(self.EQ1[0],2),round(self.EQ1[1],2)), xy=self.EQ1, xytext=(self.EQ1[0]+self.dt,self.EQ1[1]-self.dt))
+            _plots['eq'] = [plot_U1_EQ, plot_U2_EQ, plot_walras]
+
+        if 'budget' in graphs:
+            plot_budget,=plt.plot(*unpack(self.BUDGET),color="green")
+            #plt.plot(self.PU1[0],self.PU1[1],color="blue",marker="o")
+            #plt.plot(self.PU2[0],self.PU2[1],color="brown",marker="o")
+            _plots['budget'] = [plot_budget]
 
         plt.title("Edgeworth Box")
-        plt.legend([plot_pareto,plot_U1,plot_U2,plot_endow,plot_core,plot_walras,plot_budget,plot_U1_EQ,plot_U2_EQ]
-                   ,["Pareto","U1 before trade","U2 before trade","Init. endow.","Core","Equilibrium","Budget constraint","U1 at eq.","U2 at eq."])
+        legends = {
+            'pareto': ['Pareto'],
+            'utility': ['init. U1', 'init U2'],
+            'core': ['Core'],
+            'eq': ['U1 at eq.', 'U2 at eq.', 'Walras eq.'],
+            'budget': ['Budget constraint', 'U1 '],
+        }
+        #plt.legend([plot_pareto,plot_U1,plot_U2,plot_endow,plot_core,plot_walras,plot_budget,plot_U1_EQ,plot_U2_EQ]
+        #           ,["Pareto","U1 before trade","U2 before trade","Init. endow.","Core","Equilibrium","Budget constraint","U1 at eq.","U2 at eq."])
+        labels = ['init. endow.'] + sum([legends[graph] for graph in graphs if graph in legends], [])
+        plots = [plot_endow] + sum([_plots[graph] for graph in graphs if graph in _plots], [])
+        plt.legend(plots, labels)
         #Axes Dscription
         plt.xlabel("Units of 1-st good")
         plt.ylabel("Units of 2-nd good")
