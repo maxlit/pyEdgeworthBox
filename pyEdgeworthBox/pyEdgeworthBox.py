@@ -266,10 +266,8 @@ class EdgeBox():
     
     def plot(self, graphs = ['utility', 'pareto', 'budget', 'core', 'eq'], fname=None, equal_axis=True):
         plot_endow,=plt.plot(self.IE1[0],self.IE1[1],color="grey",marker="o")
-        print('upper limit')
         supply_1 = self.IE1[0] + self.IE2[0]
         supply_2 = self.IE1[1] + self.IE2[1]
-        print(supply_1, supply_2)
         plot_upper_limit, = plt.plot([0, supply_1], [supply_2, supply_2], color="grey", linewidth=.5)
         plot_right_limit, = plt.plot([supply_1, supply_1], [0, supply_2], color="grey", linewidth=.5)
         #plt.annotate("IE", (self.IE1[0], self.IE1[1]), textcoords="offset points", xytext=(5,5), ha='right')
