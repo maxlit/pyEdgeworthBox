@@ -160,10 +160,10 @@ class EdgeBox():
         self.p_weighted=[None,None]
         self.u1=u1
         self.u2=u2
-        self.u2_compl=lambda x,y: u2(self.IE[0]-x,self.IE[1]-y)
         self.IE1=IE1
         self.IE2=IE2
         self.IE=[IE1[0]+IE2[0],IE1[1]+IE2[1]]
+        self.u2_compl=lambda x,y: u2(self.IE[0] - x, self.IE[1] - y)
         self.EBP=EBP
         self.dt=min(self.IE)/float(EBP.N)
         self.X=np.linspace(self.dt,self.IE[0]-self.dt,EBP.N)
@@ -264,7 +264,7 @@ class EdgeBox():
         self.BUDGET = list(zip(self.X,Budget))
         
     
-    def plot(self, graphs = ['utility', 'pareto', 'budget', 'core', 'eq'], fname=None, equal_axis=True):
+    def plot(self, graphs = ['utility', 'pareto', 'budget', 'core', 'eq'], fname=None, equal_axis=False):
         plot_endow,=plt.plot(self.IE1[0],self.IE1[1],color="grey",marker="o")
         supply_1 = self.IE1[0] + self.IE2[0]
         supply_2 = self.IE1[1] + self.IE2[1]
