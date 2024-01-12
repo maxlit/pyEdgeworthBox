@@ -264,7 +264,7 @@ class EdgeBox():
         self.BUDGET = list(zip(self.X,Budget))
         
     
-    def plot(self, graphs = ['utility', 'pareto', 'budget', 'core', 'eq'], fname=None):
+    def plot(self, graphs = ['utility', 'pareto', 'budget', 'core', 'eq'], fname=None, equal_axis=True):
         plot_endow,=plt.plot(self.IE1[0],self.IE1[1],color="grey",marker="o")
         print('upper limit')
         supply_1 = self.IE1[0] + self.IE2[0]
@@ -275,8 +275,9 @@ class EdgeBox():
         #plt.annotate("IE", (self.IE1[0], self.IE1[1]), textcoords="offset points", xytext=(5,5), ha='right')
         #m=max(self.IE[0],self.IE[1])
         #plt.axis([0, m, 0, m])
-        # Set the aspect ratio to be equal, so that the plot is not skewed
-        #plt.gca().set_aspect('equal', adjustable='box')
+        if equal_axis:
+            # Set the aspect ratio to be equal, so that the plot is not skewed
+            plt.gca().set_aspect('equal', adjustable='box')
         margin_scale = 1.15
         plt.axis([0, supply_1*margin_scale, 0, supply_2*margin_scale])
         _plots = {}
