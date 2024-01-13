@@ -287,15 +287,26 @@ class EdgeBox():
             plot_pareto,=plt.plot(*unpack(self.PARETO),linewidth=2,color="red")
             _plots['pareto'] = [plot_pareto]
         if 'core' in graphs:
-            plot_core,=plt.plot(*unpack(self.CORE),color="black",linewidth=4)
+            plot_core,=plt.plot(*unpack(self.CORE),color="orange",linewidth=5)
             _plots['core'] = [plot_core]
         if 'eq' in graphs:
             plot_U1_EQ,=plt.plot(*unpack(self.U1_EQ),ls='--',color="blue")
             plot_U2_EQ,=plt.plot(*unpack(self.U2_EQ),ls='--',color="brown")
-            plot_walras,=plt.plot(self.EQ1[0],self.EQ1[1],color="green",marker="o")
+            plot_walras,=plt.plot(self.EQ1[0],self.EQ1[1],color="black",marker="o")
             # annotation
-            plt.annotate("(%s;%s) [p=(%s;1)]" % tuple(map(lambda x: round(x, 2), [self.EQ1[0],self.EQ1[1],self.p]))
-                         , xy=self.EQ1, xytext=(self.EQ1[0]+self.dt,self.EQ1[1]-self.dt))
+            # Annotation for the equilibrium point with adjusted positioning
+            # Annotation for the equilibrium point with adjusted positioning
+            # Annotation for the equilibrium point with adjusted positioning
+            #equilibrium_text = "({:.2f};{:.2f})".format(self.EQ1[0], self.EQ1[1])
+            #plt.annotate(equilibrium_text, xy=self.EQ1, xytext=(self.EQ1[0] - 10 * self.dt, self.EQ1[1] - 10 * self.dt), 
+            #            ha='left', va='bottom')
+
+
+            # [p=(%s;1)] % ,self.p
+            # Adding the price vector
+            plt.quiver(self.EQ1[0], self.EQ1[1], self.p, 1, angles='xy', scale_units='xy', scale=1, color='green')
+            # annotation for the vector
+            plt.text(self.EQ1[0] + self.p * 1.15, self.EQ1[1] + 1.15, 'p', horizontalalignment='right', verticalalignment='top', fontweight='bold')
 
             _plots['eq'] = [plot_U1_EQ, plot_U2_EQ, plot_walras]
 
@@ -311,7 +322,7 @@ class EdgeBox():
             'utility': ['init. U1', 'init U2'],
             'core': ['Core'],
             'eq': ['U1 at eq.', 'U2 at eq.', 'Walras eq.'],
-            'budget': ['Budget constraint', 'U1 '],
+            'budget': ['Budget line'],
         }
         #plt.legend([plot_pareto,plot_U1,plot_U2,plot_endow,plot_core,plot_walras,plot_budget,plot_U1_EQ,plot_U2_EQ]
         #           ,["Pareto","U1 before trade","U2 before trade","Init. endow.","Core","Equilibrium","Budget constraint","U1 at eq.","U2 at eq."])
