@@ -6,7 +6,7 @@ from math import exp as e, sin, sqrt
 # python -m unittest testEdgeworthBox
 
 class TestCF(unittest.TestCase):
-    #cf=cf1+cf2
+    #cf=cf1+cf2        EB4=eb.EdgeBox(u2=lambda x,y: x**0.6*y**0.4,u1=lambda x,y: x**0.1*y**0.9,IE2=[10,20],IE1=[20,10])
     def setUp(self):
         self.u1=lambda x: x
         self.u2=lambda x: x
@@ -37,6 +37,7 @@ class TestCF(unittest.TestCase):
         self.assertEqual(eb.sign(-5),-1)
 
     def testMRS(self):
+        """Test marginal rate of substitution"""
         u1=lambda x,y: x*y 
         mrs1=eb.MRS(u1)
         self.assertAlmostEqual(mrs1(1,2),2)
@@ -52,10 +53,36 @@ class TestCF(unittest.TestCase):
         self.assertAlmostEqual(mrs_uCD2(1,1),0.5,3)
 
     def testEB(self):
-        # from: http://www.pitt.edu/~mjl88/docs/1100/Problem_Set_06_Answers.pdf
-        EB4=eb.EdgeBox(u1=lambda x,y: x**0.6*y**0.4,u2=lambda x,y: x**0.1*y**0.9,IE1=[10,20],IE2=[20,10])
-        self.assertAlmostEqual(EB4.EQ1[0],26.31,2)
-        self.assertAlmostEqual(EB4.EQ1[1],10.36,2)
+        """Test Cobb-Douglas utility"""
+        EB=eb.EdgeBox(u1=lambda x,y: x**0.6*y**0.4,u2=lambda x,y: x**0.1*y**0.9,IE1=[10,20],IE2=[20,10])
+        self.assertAlmostEqual(EB.EQ1[0],26.31,2)
+        self.assertAlmostEqual(EB.EQ1[1],10.36,2)
+
+    def testLogEB(self):
+        """Test log utility"""
+        from math import log
+        u = lambda x,y: x*y
+        EB = eb.EdgeBox(u1 = u, u2 = u, IE1=[10,20], IE2=[20,10])
+        logEB = eb.EdgeBox(u1 = lambda x,y: log(u(x,y)), u2 = lambda x,y: log(u(x,y)), IE1=[10,20], IE2=[20,10])
+        self.assertAlmostEqual(EB.EQ1[0], 15, 2)
+        self.assertAlmostEqual(EB.EQ1[1], 15, 2)
+        self.assertAlmostEqual(logEB.EQ1[0], 15, 2)
+        self.assertAlmostEqual(logEB.EQ1[1], 15, 2)
+
+    def testFlip(self):
+        """Test the reverse of participants"""
+        EB=eb.EdgeBox(u1=lambda x,y: x**0.6*y**0.4,u2=lambda x,y: x**0.1*y**0.9,IE1=[10,20],IE2=[20,10])
+        EB_rev=eb.EdgeBox(u2=lambda x,y: x**0.6*y**0.4,u1=lambda x,y: x**0.1*y**0.9,IE2=[10,20],IE1=[20,10])
+        self.assertAlmostEqual(EB.EQ2[0], 30 - 26.31, 2)
+        self.assertAlmostEqual(EB.EQ2[1], 30 - 10.36, 2)
+
+    def testUIE(self):
+        """Test the utility of initial endowment"""
+        EB=eb.EdgeBox(u1=lambda x,y: x**0.6*y**0.4,u2=lambda x,y: x**0.1*y**0.9,IE1=[4,10],IE2=[6,10])
+        EB_rev=eb.EdgeBox(u2=lambda x,y: x**0.6*y**0.4,u1=lambda x,y: x**0.1*y**0.9,IE2=[4,10],IE1=[6,10])
+        self.assertAlmostEqual(EB.UIE1, 5.770799623628854)
+        self.assertAlmostEqual(EB_rev.UIE2, 5.770799623628854)
+        
         
 
 def main():
