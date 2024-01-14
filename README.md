@@ -3,9 +3,8 @@
 
 # How to use it
 
-[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg")](https://colab.research.google.com/drive/1hzBEFrur32i20EwzLEPnOa0MkQrQIJkV?usp=sharing)
 <a href="https://youtu.be/dxLkqIAZ1Yc"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/240px-YouTube_Logo_2017.svg.png" align="left" height="16" width="80" target="_blank"></a>[  Plot the Edgeworth box](https://youtu.be/dxLkqIAZ1Yc)
-
+ <a target="_blank" href="https://colab.research.google.com/drive/1hzBEFrur32i20EwzLEPnOa0MkQrQIJkV?usp=sharing"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
 If you work with docker, launch the jupyter notebook from the command line as follows
 
