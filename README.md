@@ -3,6 +3,8 @@
 
 # How to use it
 
+[Plotting the Edgeworth box](https://youtu.be/dxLkqIAZ1Yc)<a href="https://youtu.be/dxLkqIAZ1Yc"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/240px-YouTube_Logo_2017.svg.png" height="16" width="80"></a>
+
 If you work with docker, launch the jupyter notebook from the command line as follows
 
 ```bash
