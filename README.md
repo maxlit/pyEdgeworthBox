@@ -3,7 +3,7 @@
 
 # How to use it
 
-[![Google Colab](https://path/to/colab_logo.png)](https://colab.research.google.com/drive/1hzBEFrur32i20EwzLEPnOa0MkQrQIJkV?usp=sharing)
+[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg")](https://colab.research.google.com/drive/1hzBEFrur32i20EwzLEPnOa0MkQrQIJkV?usp=sharing)
 <a href="https://youtu.be/dxLkqIAZ1Yc"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/240px-YouTube_Logo_2017.svg.png" align="left" height="16" width="80" target="_blank"></a>[  Plot the Edgeworth box](https://youtu.be/dxLkqIAZ1Yc)
 
 
