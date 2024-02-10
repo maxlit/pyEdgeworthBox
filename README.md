@@ -112,3 +112,14 @@ The computation is implemented only for the interior solutions! For "bad" functi
 # Install
 
 *pip install pyEdgeworthBox*
+
+# Citation
+```bibtex
+@misc{pyEdgeworthBox2023,
+  author = {Maxim Litvak},
+  title = {pyEdgeworthBox: A Python Library for Edgeworth Box Plots},
+  year = {2024},  % Year of the version or first release, as appropriate
+  version = {0.3.3},
+  howpublished = {\url{https://github.com/maxlit/pyEdgeworthBox}},
+}
+```

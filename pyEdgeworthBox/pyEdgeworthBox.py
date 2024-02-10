@@ -208,7 +208,10 @@ class EdgeBox():
         else:
             self.U2_min=None
             self.U2_max=None
-        self._B=lambda x,y,p: y-(p*(self.IE1[0]-x)+self.IE1[1]) # budget constraint 
+        # budget constraint with the price of y set to 1 
+        # i.e. p*x + y = p*w1 + w2, then solved for y
+        # i.e. y = p*(w1 - x) + w2
+        self._B=lambda x,y,p: y - (p*(self.IE1[0] - x) + self.IE1[1])
     
     def calc_pareto(self):
         self.MRS1=MRS(self.u1) # marginal rate of substitution of the 1st participant
@@ -218,14 +221,17 @@ class EdgeBox():
         #self._pareto=lambda x: root(lambda y: _(self.MRS1, x, y)/_(self.MRS2, self.IE[0] - x, self.IE[1] - y) - 1, self.Y[0], self.Y[-1]) # Pareto solutions in functional form
         P = list(map(lambda x: f_None(self._pareto,x), self.X[1:-1]))
         self.PARETO = list(zip(self.X[1:-1],P)) # set of some Pareto solution points (enough to draw it)
-        self._Bx = lambda x: root(lambda y: self._B(x,y, self.MRS1(x,y)), self.Y[0], self.Y[-1])
-        #plot_pareto,=plt.plot(X,P,linewidth=2)
+        #self._Bx = lambda x: root(lambda y: self._B(x,y, self.MRS1(x,y)), self.Y[0], self.Y[-1])
+        # ---
+        # Point where Pareto efficient allocation is equivalent to the initial endowment (their utilities are equal) for the 1st participant
         PU1_X = root(lambda x: _(self._pareto,x) - _(self.u_ie_1,x), self.U1_min[0], self.U1_max[0])
+        # Point where Pareto efficient allocation is equivalent to the initial endowment (their utilities are equal) for the 2ns participant
         PU2_X = root(lambda x: _(self._pareto,x) - _(self.u_ie_2_compl,x), self.U2_min[0], self.U2_max[0])
         PU1_Y = self.u_ie_1(PU1_X)
         PU2_Y = self.u_ie_2_compl(PU2_X)
         self.PU1 = [PU1_X,PU1_Y]
         self.PU2 = [PU2_X,PU2_Y]
+        # in the budget constraint, replace the price parameter with MRS, thus the price parameter is gone:
         self._Bx = lambda x: root(lambda y: _(self._B,x,y,_(self.MRS1,x,y)),self.Y[0],self.Y[-1])
     
     def calc_core(self):
@@ -321,7 +327,7 @@ class EdgeBox():
             'pareto': ['Pareto'],
             'utility': ['init. U1', 'init U2'],
             'core': ['Core'],
-            'eq': ['U1 at eq.', 'U2 at eq.', 'Walras eq.'],
+            'eq': ['U1 at9 eq.', 'U2 at eq.', 'Walras eq.'],
             'budget': ['Budget line'],
         }
         #plt.legend([plot_pareto,plot_U1,plot_U2,plot_endow,plot_core,plot_walras,plot_budget,plot_U1_EQ,plot_U2_EQ]
