@@ -23,10 +23,8 @@ class TestCF(unittest.TestCase):
         f=lambda x: x**2-2*x+1
         self.assertAlmostEqual(eb.root(f,0,10),1)
 
-    def testBoundedRoot(self):
-        pass
-
     def testPrime(self):
+        """Test numerical derivative"""
         f=lambda x: x**2
         g=lambda x: sqrt(x)
         self.assertAlmostEqual(eb.prime(f)(1),2,4)
@@ -57,6 +55,13 @@ class TestCF(unittest.TestCase):
         EB=eb.EdgeBox(u1=lambda x,y: x**0.6*y**0.4,u2=lambda x,y: x**0.1*y**0.9,IE1=[10,20],IE2=[20,10])
         self.assertAlmostEqual(EB.EQ1[0],26.31,2)
         self.assertAlmostEqual(EB.EQ1[1],10.36,2)
+    
+    def testPriceMRS(self):
+        EB=eb.EdgeBox(u1=lambda x,y: x**0.6*y**0.4,u2=lambda x,y: x**0.1*y**0.9,IE1=[10,20],IE2=[20,10])
+        x = EB.pMRS1x(EB.EQ1[1], EB.p)
+        y = EB.pMRS1y(EB.EQ1[0], EB.p)
+        self.assertAlmostEqual(x, EB.EQ1[0])
+        self.assertAlmostEqual(y, EB.EQ1[1])
 
     def testLogEB(self):
         """Test log utility"""
