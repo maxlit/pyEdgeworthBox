@@ -170,6 +170,15 @@ class EdgeBox():
         self.Y=np.linspace(self.dt,self.IE[1]-self.dt,EBP.N)
         self.calc_init()
         self.calc()
+
+    # set points for a plot
+    # e.g. set_points_for_plot('PARETO', self._pareto)
+    # then one can use self.PARETO to plot the function self._pareto
+    def set_points_for_plot(self, prop, fn, domain = None):
+        if domain is None:
+            domain = self.X
+        points = list(map(fn, domain)) # set of some points from the budget line
+        setattr(self, prop, list(zip(domain, points)))
     
     def calc(self):
         """
@@ -179,7 +188,6 @@ class EdgeBox():
         self.calc_core()
         self.calc_eq()
         self.calc_budget()
-        
     
     def calc_init(self):
         self.u1(*self.IE1)
@@ -189,9 +197,10 @@ class EdgeBox():
         self.u_ie_2=lambda x: root(lambda y: self.u2(x,y)-self.UIE2,self.Y[0],self.Y[-1])  # utility function at initial endowment of the 2-nd participant
         self.u_ie_2_compl=lambda x: -self.u_ie_2(self.IE[0]-x)+self.IE[1]                   # utility function at initial endowment of the 2-nd participant in terms of the 1-st
 
+        #self.set_points_for_plot('U1', lambda x: correct(x, f_None(self.u_ie_1,x), self.u1, self.UIE1))
+        #self.set_points_for_plot('U2', lambda x: correct(x, f_None(self.u_ie_2_compl,x), self.u2_compl, self.UIE2))
         U1 = list(map(lambda x: correct(x,f_None(self.u_ie_1,x),self.u1,self.UIE1),self.X))
         U2 = list(map(lambda x: correct(x,f_None(self.u_ie_2_compl,x),self.u2_compl,self.UIE2),self.X))
-        
         self.U1 = list(filter(lambda x: x[0] is not None and x[1] is not None,zip(self.X,U1)))
         self.U2 = list(filter(lambda x: x[0] is not None and x[1] is not None,zip(self.X,U2)))
         U1_sort = sorted(self.U1,key=lambda x: x[1])
@@ -224,14 +233,15 @@ class EdgeBox():
         # same for the 2nd participant
         self.pMRS2x = lambda y,p: root(lambda x: self.MRS2(x, y) - p, self.X[0], self.X[-1])
         self.pMRS2y = lambda x,p: root(lambda y: self.MRS2(x, y) - p, self.Y[0], self.Y[-1])
+        # complementary demand functions for the 2nd participant (to be represented in terms of the 1st participant's goods)
+        self.pMRS2x_compl = lambda y,p: self.IE[0] - self.pMRS2x(y,p)
+        self.pMRS2y_compl = lambda x,p: self.IE[1] - self.pMRS2y(x,p)
         #self.pMRS1 = lambda y,p: root(lambda x: self.MRS1(x, y) - p, self.X[0], self.X[-1]) # marginal rate of substitution of the 1st participant in terms of the price
         # ratio of marginal rates of substitution:
         self.mrs_ratio = lambda x,y: self.MRS1(x,y)/self.MRS2(self.IE[0]-x,self.IE[1]-y)
         self._pareto = lambda x: root(lambda y: self.mrs_ratio(x,y) - 1, self.Y[0], self.Y[-1]) # Pareto solutions in functional form
         #self._pareto=lambda x: root(lambda y: _(self.MRS1, x, y)/_(self.MRS2, self.IE[0] - x, self.IE[1] - y) - 1, self.Y[0], self.Y[-1]) # Pareto solutions in functional form
-        P = list(map(lambda x: f_None(self._pareto,x), self.X[1:-1]))
-        self.PARETO = list(zip(self.X[1:-1],P)) # set of some Pareto solution points (enough to draw it)
-        #self._Bx = lambda x: root(lambda y: self._B(x,y, self.MRS1(x,y)), self.Y[0], self.Y[-1])
+        self.set_points_for_plot('PARETO', lambda x: f_None(self._pareto,x))
         # ---
         # Point where Pareto efficient allocation is equivalent to the initial endowment (their utilities are equal) for the 1st participant
         PU1_X = root(lambda x: _(self._pareto,x) - _(self.u_ie_1,x), self.U1_min[0], self.U1_max[0])
@@ -265,20 +275,19 @@ class EdgeBox():
         self.u_eq_2=lambda x: root(lambda y: self.u2(x,y)-self.UEQ2,self.Y[0],self.Y[-1])
         self.u_eq_2_compl=lambda x: -self.u_eq_2(self.IE[0]-x)+self.IE[1]
         
-        U1_EQ = list(map(lambda x: correct(x,f_None(self.u_eq_1,x),self.u1,self.UEQ1),self.X))
-        U2_EQ = list(map(lambda x: correct(x,f_None(self.u_eq_2_compl,x),self.u2_compl,self.UEQ2),self.X))
-        self.U1_EQ = list(filter(lambda x: x[0] is not None and x[1] is not None,zip(self.X,U1_EQ)))
-        self.U2_EQ = list(filter(lambda x: x[0] is not None and x[1] is not None,zip(self.X,U2_EQ)))
+        self.set_points_for_plot('U1_EQ', lambda x: correct(x, f_None(self.u_eq_1,x), self.u1, self.UEQ1))
+        self.set_points_for_plot('U2_EQ', lambda x: correct(x, f_None(self.u_eq_2_compl,x), self.u2_compl, self.UEQ2))
+        #U1_EQ = list(map(lambda x: correct(x,f_None(self.u_eq_1,x),self.u1,self.UEQ1),self.X))
+        #U2_EQ = list(map(lambda x: correct(x,f_None(self.u_eq_2_compl,x),self.u2_compl,self.UEQ2),self.X))
+        #self.U1_EQ = list(filter(lambda x: x[0] is not None and x[1] is not None,zip(self.X,U1_EQ)))
+        #self.U2_EQ = list(filter(lambda x: x[0] is not None and x[1] is not None,zip(self.X,U2_EQ)))
         
     def calc_budget(self,price=None):
         if price is None:
             price=self.p
             
         self.Bp=lambda x: price*self.IE1[0]+self.IE1[1]-price*x # budget line (functional form)
-        
-        Budget = list(map(self.Bp,self.X)) # set of some points from the budget line
-        self.BUDGET = list(zip(self.X,Budget))
-        
+        self.set_points_for_plot('BUDGET', self.Bp)        
     
     def plot(self, graphs = ['utility', 'pareto', 'budget', 'core', 'eq'], fname=None, equal_axis=False):
         standard_graphs = ['utility', 'pareto', 'budget', 'core', 'eq']
@@ -337,7 +346,7 @@ class EdgeBox():
             prop = getattr(self, non_standard_graph, None)
             if prop is not None:
                 tmp_plot, = plt.plot(*unpack(prop), label=non_standard_graph)
-                _plots[non_standard_graph] = tmp_plot
+                _plots[non_standard_graph] = [tmp_plot]
                 legends[non_standard_graph] = [non_standard_graph]
 
         #plt.legend([plot_pareto,plot_U1,plot_U2,plot_endow,plot_core,plot_walras,plot_budget,plot_U1_EQ,plot_U2_EQ]
