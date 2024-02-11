@@ -216,7 +216,17 @@ class EdgeBox():
     def calc_pareto(self):
         self.MRS1=MRS(self.u1) # marginal rate of substitution of the 1st participant
         self.MRS2=MRS(self.u2) # marginal rate of substitution of the 2nd participant
-        self.mrs_ratio = lambda x,y: self.MRS1(x,y)/self.MRS2(self.IE[0]-x,self.IE[1]-y) # ratio of marginal rates of substitution
+        # these can be used as offer/deamnd functions
+        # MRS solved for p (i.e. not a function x and y, but x and p): x = f(y,p)
+        self.pMRS1x = lambda y,p: root(lambda x: self.MRS1(x, y) - p, self.X[0], self.X[-1])
+        # same, but y = g(x, p)
+        self.pMRS1y = lambda x,p: root(lambda y: self.MRS1(x, y) - p, self.Y[0], self.Y[-1]) 
+        # same for the 2nd participant
+        self.pMRS2x = lambda y,p: root(lambda x: self.MRS2(x, y) - p, self.X[0], self.X[-1])
+        self.pMRS2y = lambda x,p: root(lambda y: self.MRS2(x, y) - p, self.Y[0], self.Y[-1])
+        #self.pMRS1 = lambda y,p: root(lambda x: self.MRS1(x, y) - p, self.X[0], self.X[-1]) # marginal rate of substitution of the 1st participant in terms of the price
+        # ratio of marginal rates of substitution:
+        self.mrs_ratio = lambda x,y: self.MRS1(x,y)/self.MRS2(self.IE[0]-x,self.IE[1]-y)
         self._pareto = lambda x: root(lambda y: self.mrs_ratio(x,y) - 1, self.Y[0], self.Y[-1]) # Pareto solutions in functional form
         #self._pareto=lambda x: root(lambda y: _(self.MRS1, x, y)/_(self.MRS2, self.IE[0] - x, self.IE[1] - y) - 1, self.Y[0], self.Y[-1]) # Pareto solutions in functional form
         P = list(map(lambda x: f_None(self._pareto,x), self.X[1:-1]))
@@ -233,7 +243,7 @@ class EdgeBox():
         self.PU2 = [PU2_X,PU2_Y]
         # in the budget constraint, replace the price parameter with MRS, thus the price parameter is gone:
         self._Bx = lambda x: root(lambda y: _(self._B,x,y,_(self.MRS1,x,y)),self.Y[0],self.Y[-1])
-    
+        
     def calc_core(self):
         CORE_X = list(filter(lambda x: x>=self.PU1[0] and x<=self.PU2[0], self.X))
         CORE_Y = list(map(lambda x: self._pareto(x), CORE_X))
@@ -271,6 +281,7 @@ class EdgeBox():
         
     
     def plot(self, graphs = ['utility', 'pareto', 'budget', 'core', 'eq'], fname=None, equal_axis=False):
+        standard_graphs = ['utility', 'pareto', 'budget', 'core', 'eq']
         plot_endow,=plt.plot(self.IE1[0],self.IE1[1],color="grey",marker="o")
         supply_1 = self.IE1[0] + self.IE2[0]
         supply_2 = self.IE1[1] + self.IE2[1]
@@ -299,23 +310,12 @@ class EdgeBox():
             plot_U1_EQ,=plt.plot(*unpack(self.U1_EQ),ls='--',color="blue")
             plot_U2_EQ,=plt.plot(*unpack(self.U2_EQ),ls='--',color="brown")
             plot_walras,=plt.plot(self.EQ1[0],self.EQ1[1],color="black",marker="o")
-            # annotation
-            # Annotation for the equilibrium point with adjusted positioning
-            # Annotation for the equilibrium point with adjusted positioning
-            # Annotation for the equilibrium point with adjusted positioning
-            #equilibrium_text = "({:.2f};{:.2f})".format(self.EQ1[0], self.EQ1[1])
-            #plt.annotate(equilibrium_text, xy=self.EQ1, xytext=(self.EQ1[0] - 10 * self.dt, self.EQ1[1] - 10 * self.dt), 
-            #            ha='left', va='bottom')
-
-
             # [p=(%s;1)] % ,self.p
             # Adding the price vector
             plt.quiver(self.EQ1[0], self.EQ1[1], self.p, 1, angles='xy', scale_units='xy', scale=1, color='green')
             # annotation for the vector
             plt.text(self.EQ1[0] + self.p * 1.15, self.EQ1[1] + 1.15, 'p', horizontalalignment='right', verticalalignment='top', fontweight='bold')
-
             _plots['eq'] = [plot_U1_EQ, plot_U2_EQ, plot_walras]
-
         if 'budget' in graphs:
             plot_budget,=plt.plot(*unpack(self.BUDGET),color="green")
             #plt.plot(self.PU1[0],self.PU1[1],color="blue",marker="o")
@@ -327,9 +327,19 @@ class EdgeBox():
             'pareto': ['Pareto'],
             'utility': ['init. U1', 'init U2'],
             'core': ['Core'],
-            'eq': ['U1 at9 eq.', 'U2 at eq.', 'Walras eq.'],
+            'eq': ['U1 at eq.', 'U2 at eq.', 'Walras eq.'],
             'budget': ['Budget line'],
         }
+
+        # Add non-standard graphs, i.e. those that user adds herslef manually
+        non_standard_graphs = [graph for graph in graphs if graph not in standard_graphs]
+        for non_standard_graph in non_standard_graphs:
+            prop = getattr(self, non_standard_graph, None)
+            if prop is not None:
+                tmp_plot, = plt.plot(*unpack(prop), label=non_standard_graph)
+                _plots[non_standard_graph] = tmp_plot
+                legends[non_standard_graph] = [non_standard_graph]
+
         #plt.legend([plot_pareto,plot_U1,plot_U2,plot_endow,plot_core,plot_walras,plot_budget,plot_U1_EQ,plot_U2_EQ]
         #           ,["Pareto","U1 before trade","U2 before trade","Init. endow.","Core","Equilibrium","Budget constraint","U1 at eq.","U2 at eq."])
         labels = ['init. endow.'] + sum([legends[graph] for graph in graphs if graph in legends], [])
@@ -338,6 +348,7 @@ class EdgeBox():
         #Axes Dscription
         plt.xlabel("Units of 1-st good")
         plt.ylabel("Units of 2-nd good")
+        plt.grid()
         if fname is not None:
             plt.savefig(fname)
             plt.close()
