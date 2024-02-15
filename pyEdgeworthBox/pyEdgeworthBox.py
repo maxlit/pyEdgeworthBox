@@ -199,8 +199,8 @@ class EdgeBox():
 
         #self.set_points_for_plot('U1', lambda x: correct(x, f_None(self.u_ie_1,x), self.u1, self.UIE1))
         #self.set_points_for_plot('U2', lambda x: correct(x, f_None(self.u_ie_2_compl,x), self.u2_compl, self.UIE2))
-        U1 = list(map(lambda x: correct(x,f_None(self.u_ie_1,x),self.u1,self.UIE1),self.X))
-        U2 = list(map(lambda x: correct(x,f_None(self.u_ie_2_compl,x),self.u2_compl,self.UIE2),self.X))
+        U1 = map(lambda x: correct(x, f_None(self.u_ie_1,x), self.u1, self.UIE1), self.X)
+        U2 = map(lambda x: correct(x, f_None(self.u_ie_2_compl,x), self.u2_compl, self.UIE2), self.X)
         self.U1 = list(filter(lambda x: x[0] is not None and x[1] is not None,zip(self.X,U1)))
         self.U2 = list(filter(lambda x: x[0] is not None and x[1] is not None,zip(self.X,U2)))
         U1_sort = sorted(self.U1,key=lambda x: x[1])
@@ -234,8 +234,8 @@ class EdgeBox():
         self.pMRS2x = lambda y,p: root(lambda x: self.MRS2(x, y) - p, self.X[0], self.X[-1])
         self.pMRS2y = lambda x,p: root(lambda y: self.MRS2(x, y) - p, self.Y[0], self.Y[-1])
         # complementary demand functions for the 2nd participant (to be represented in terms of the 1st participant's goods)
-        self.pMRS2x_compl = lambda y,p: self.IE[0] - self.pMRS2x(y,p)
-        self.pMRS2y_compl = lambda x,p: self.IE[1] - self.pMRS2y(x,p)
+        self.pMRS2x_compl = lambda y,p: root(lambda x: self.MRS2(self.IE[0] - x,  self.IE[1] - y) - p, self.X[0], self.X[-1]) #lambda y,p: self.IE[0] - self.pMRS2x(y,p)
+        self.pMRS2y_compl = lambda x,p: root(lambda y: self.MRS2(self.IE[0] - x, self.IE[0] - y) - p, self.Y[0], self.Y[-1]) #lambda x,p: self.IE[1] - self.pMRS2y(x,p)
         #self.pMRS1 = lambda y,p: root(lambda x: self.MRS1(x, y) - p, self.X[0], self.X[-1]) # marginal rate of substitution of the 1st participant in terms of the price
         # ratio of marginal rates of substitution:
         self.mrs_ratio = lambda x,y: self.MRS1(x,y)/self.MRS2(self.IE[0]-x,self.IE[1]-y)
