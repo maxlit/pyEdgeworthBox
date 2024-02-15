@@ -255,8 +255,8 @@ class EdgeBox():
         self._Bx = lambda x: root(lambda y: _(self._B,x,y,_(self.MRS1,x,y)),self.Y[0],self.Y[-1])
         
     def calc_core(self):
-        CORE_X = list(filter(lambda x: x>=self.PU1[0] and x<=self.PU2[0], self.X))
-        CORE_Y = list(map(lambda x: self._pareto(x), CORE_X))
+        CORE_X = filter(lambda x: x>=self.PU1[0] and x<=self.PU2[0], self.X)
+        CORE_Y = map(lambda x: self._pareto(x), CORE_X)
         self.CORE = list(zip(CORE_X,CORE_Y)) # set of some solutions in the core (could be one, could be many or none)
 
     def calc_eq(self):
@@ -277,10 +277,6 @@ class EdgeBox():
         
         self.set_points_for_plot('U1_EQ', lambda x: correct(x, f_None(self.u_eq_1,x), self.u1, self.UEQ1))
         self.set_points_for_plot('U2_EQ', lambda x: correct(x, f_None(self.u_eq_2_compl,x), self.u2_compl, self.UEQ2))
-        #U1_EQ = list(map(lambda x: correct(x,f_None(self.u_eq_1,x),self.u1,self.UEQ1),self.X))
-        #U2_EQ = list(map(lambda x: correct(x,f_None(self.u_eq_2_compl,x),self.u2_compl,self.UEQ2),self.X))
-        #self.U1_EQ = list(filter(lambda x: x[0] is not None and x[1] is not None,zip(self.X,U1_EQ)))
-        #self.U2_EQ = list(filter(lambda x: x[0] is not None and x[1] is not None,zip(self.X,U2_EQ)))
         
     def calc_budget(self,price=None):
         if price is None:
@@ -340,7 +336,7 @@ class EdgeBox():
             'budget': ['Budget line'],
         }
 
-        # Add non-standard graphs, i.e. those that user adds herslef manually
+        # Add non-standard graphs, i.e. those that user adds manually (customization)
         non_standard_graphs = [graph for graph in graphs if graph not in standard_graphs]
         for non_standard_graph in non_standard_graphs:
             prop = getattr(self, non_standard_graph, None)
@@ -349,8 +345,6 @@ class EdgeBox():
                 _plots[non_standard_graph] = [tmp_plot]
                 legends[non_standard_graph] = [non_standard_graph]
 
-        #plt.legend([plot_pareto,plot_U1,plot_U2,plot_endow,plot_core,plot_walras,plot_budget,plot_U1_EQ,plot_U2_EQ]
-        #           ,["Pareto","U1 before trade","U2 before trade","Init. endow.","Core","Equilibrium","Budget constraint","U1 at eq.","U2 at eq."])
         labels = ['init. endow.'] + sum([legends[graph] for graph in graphs if graph in legends], [])
         plots = [plot_endow] + sum([_plots[graph] for graph in graphs if graph in _plots], [])
         plt.legend(plots, labels)
